@@ -42,19 +42,21 @@ const UserModel = mongoose.model('emails',userSchema)
 
     // Send email
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
 
-    const mailOptions = {
-      from: email,
-      to: 'kingsblog9ja@gmail.com',
-      subject: `New Contact Message from ${name}`,
-      text: `${message}`,
-    };
+const mailOptions = {
+  from: process.env.EMAIL_USER,
+  to: 'kingsblog9ja@gmail.com',
+  replyTo: email,  // visitor email for replies
+  subject: `New Contact Message from ${name}`,
+  text: message,
+};
+
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -75,9 +77,11 @@ const UserModel = mongoose.model('emails',userSchema)
 
 
 
-app.listen(3000,()=>{
-    console.log('server up and runing ,port 3000')
-})
+ const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
 
 
  
